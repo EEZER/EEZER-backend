@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.json.JsonObject;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Vehicle implements Model{
     private String vehicleId;
     private String country;
@@ -141,6 +142,20 @@ public class Vehicle implements Model{
 
     @Override
     public JsonObject toJson() {
-        return null;
+        JsonObject ret = new JsonObject();
+        ret
+            .put("vehicleId", vehicleId)
+            .put("country", country)
+            .put("region", region)
+            .put("organization", organization)
+            .put("contact", contact)
+            .put("phone", phone)
+            .put("email", email)
+            .put("address", address)
+            .put("yearOfManufacture", yearOfManufacture)
+            .put("handoverDate", handoverDate)
+            .put("runningTime", runningTime)
+            .put("createdTime", createdTime);
+        return ret;
     }
 }

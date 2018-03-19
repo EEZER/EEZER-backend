@@ -9,6 +9,8 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Transport implements Model {
 
+    public static final String COLLECTION = "Transport";
+
     // TODO: 2018-03-11 Add created time fields
 
     private String transportId;
