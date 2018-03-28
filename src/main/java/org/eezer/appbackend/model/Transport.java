@@ -159,4 +159,19 @@ public class Transport implements Model {
             .put("started", started)
             .put("ended", ended);
     }
+
+    public static JsonObject fieldsNoCoordinates() {
+        return new JsonObject()
+            .put("transportId", 1)
+            .put("driverId", 1)
+            .put("vehicleId", 1)
+            .put("passengerName", 1)
+            .put("passengerPhone", 1)
+            .put("gender", 1)
+            .put("reason", 1)
+            .put("distance", 1)
+            .put("duration", 1)
+            .put("started", 1)
+            .put("ended", 1);
+    }
 }
