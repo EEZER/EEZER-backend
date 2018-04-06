@@ -39,5 +39,14 @@ public interface EezerDBService {
     @Fluent
     EezerDBService getCoordinates (String transportId, Handler<AsyncResult<JsonArray>> resultHandler);
 
+    @Fluent
+    EezerDBService postVehicle (JsonObject vehicle, Handler<AsyncResult<JsonObject>> resultHandler);
+
+    @Fluent
+    EezerDBService deleteVehicle (String vehicleId, Handler<AsyncResult<JsonObject>> resultHandler);
+
+    @Fluent
+    EezerDBService getVehicles (Handler<AsyncResult<JsonArray>> resultHandler);
+
 
 }

@@ -11,6 +11,7 @@ import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClient;
 import org.eezer.appbackend.database.EezerDBService;
 import org.eezer.appbackend.model.Transport;
+import org.eezer.appbackend.model.Vehicle;
 
 public class EezerDBServiceImpl implements EezerDBService {
 
@@ -21,6 +22,7 @@ public class EezerDBServiceImpl implements EezerDBService {
         this.client = client;
     }
 
+    // ######################TRANSPORT###########################################
     @Override
     public EezerDBService postTransport(JsonObject _transport, Handler<AsyncResult<JsonObject>> resultHandler) {
         Transport transport = _transport.mapTo(Transport.class);
@@ -88,4 +90,58 @@ public class EezerDBServiceImpl implements EezerDBService {
         });
         return this;
     }
+
+    // ######################VEHICLE#############################################
+
+    @Override
+    public EezerDBService postVehicle(JsonObject _vehicle, Handler<AsyncResult<JsonObject>> resultHandler) {
+        Vehicle vehicle = _vehicle.mapTo(Vehicle.class);
+        client.save(Vehicle.COLLECTION, vehicle.toJson(), res -> {
+            if (res.succeeded()) {
+                LOGGER.info("Succeeded saving new vehicle to database _id:" + res.result());
+                resultHandler.handle(Future.<JsonObject>succeededFuture(vehicle.toJson()));
+            } else {
+                LOGGER.error("Error saving vehicle to database", res.cause());
+                resultHandler.handle(Future.failedFuture(res.cause()));
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public EezerDBService deleteVehicle(String vehicleId, Handler<AsyncResult<JsonObject>> resultHandler) {
+        client.removeDocument(Vehicle.COLLECTION, new JsonObject().put("vehicleId", vehicleId), res -> {
+            if (res.succeeded()) {
+                if (res.result().getRemovedCount() == 1) {
+                    LOGGER.info("Deleted vehicle: " + vehicleId);
+                    resultHandler.handle(Future.succeededFuture());
+                } else {
+                    LOGGER.error("Error deleting vehicle, not found: " + vehicleId);
+                    resultHandler.handle(Future.failedFuture(new Exception("Not Found")));
+                }
+            } else {
+                LOGGER.error("Error removing vehicle from database", res.cause());
+                resultHandler.handle(Future.failedFuture(res.cause()));
+            }
+        });
+        return this;
+    }
+
+    @Override
+    public EezerDBService getVehicles(Handler<AsyncResult<JsonArray>> resultHandler) {
+        // TODO: 2018-04-06 Specify what columns to get
+        // TODO: 2018-04-06 WARNING, NOT SURE ABOUT IF THIS WORKS
+        client.find(Transport.COLLECTION, new JsonObject(), res -> {
+            if (res.succeeded()) {
+                // TODO: 2018-04-06 Check if result is not empty (404)
+                LOGGER.info("Get all vehicles succeeded");
+                resultHandler.handle(Future.succeededFuture(new JsonArray(res.result())));
+            } else {
+                LOGGER.error("Error getting all vehicles", res.cause());
+                resultHandler.handle(Future.failedFuture(res.cause()));
+            }
+        });
+        return this;
+    }
+
 }

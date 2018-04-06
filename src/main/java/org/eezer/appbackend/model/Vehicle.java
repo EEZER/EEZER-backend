@@ -6,6 +6,10 @@ import io.vertx.core.json.JsonObject;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class Vehicle implements Model{
+
+    public static final String COLLECTION = "Vehicle";
+
+
     private String vehicleId;
     private String country;
     private String region;
